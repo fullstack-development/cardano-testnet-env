@@ -9,7 +9,7 @@ WORKDIR /workdir
 
 RUN git clone https://github.com/input-output-hk/plutus-apps.git && \
     cd plutus-apps && \
-    git checkout v2022-04-06
+    git checkout main
 
 RUN cd plutus-apps && \
     nix build --extra-experimental-features nix-command -f default.nix plutus-apps.haskell.packages.plutus-chain-index.components.exes.plutus-chain-index

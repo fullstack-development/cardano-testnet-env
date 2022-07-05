@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   cardano-node:
-    image: inputoutput/cardano-node:1.34.1
+    image: inputoutput/cardano-node:1.35.0
     container_name: cardano-node-testnet
     environment:
       NETWORK: testnet
@@ -44,7 +44,7 @@ services:
       - chain-index-testnet-db:/data
 
   cardano-wallet:
-    image: inputoutput/cardano-wallet:2022.4.27
+    image: inputoutput/cardano-wallet:2022.7.1
     volumes:
       - wallet-testnet-db:/wallet-db
       - node-ipc:/ipc
