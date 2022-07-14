@@ -9,7 +9,7 @@ WORKDIR /workdir
 
 RUN git clone https://github.com/input-output-hk/plutus-apps.git && \
     cd plutus-apps && \
-    git checkout main
+    git checkout 3377926c9b0818e2107934f8f1bd936440fe0bb4
 
 RUN cd plutus-apps && \
     nix build --extra-experimental-features nix-command -f default.nix plutus-apps.haskell.packages.plutus-chain-index.components.exes.plutus-chain-index
@@ -19,6 +19,7 @@ RUN mkdir /ipc /data
 ENV CARDANO_NODE_SOCKET_PATH=/ipc/node.socket
 ENV DB_PATH=/data
 ENV NETWORK_ID=1097911063
+ENV ADDITIONAL_PARAMS=
 
 EXPOSE 9083
 
@@ -27,4 +28,5 @@ CMD (while [ ! -S "$CARDANO_NODE_SOCKET_PATH" ]; do echo "waiting for socket..."
     --socket-path ${CARDANO_NODE_SOCKET_PATH} \
     --db-path ${DB_PATH}/chain-index.db \
     --network-id ${NETWORK_ID} \
+    ${ADDITIONAL_PARAMS} \
     start-index

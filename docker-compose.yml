@@ -42,6 +42,8 @@ services:
     volumes:
       - node-ipc:/ipc
       - chain-index-testnet-db:/data
+    environment:
+      - ADDITIONAL_PARAMS=--append-transaction-queue-size 1
 
   cardano-wallet:
     image: inputoutput/cardano-wallet:2022.7.1
