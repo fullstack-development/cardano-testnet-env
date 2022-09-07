@@ -1,0 +1,16 @@
+#!/bin/bash
+# Install this as a `post-receive` git hook in --bare repo
+WORKDIR=/shared/cardano-testnet-env-checkout
+rm -fr $WORKDIR
+mkdir -p $WORKDIR
+
+while read oldrev newrev ref
+    do
+    branch=`echo $ref | cut -d/ -f3`
+
+    echo Checking out $branch branch
+    git --work-tree=$WORKDIR checkout -f $branch
+done
+
+cd $WORKDIR
+./deploy
