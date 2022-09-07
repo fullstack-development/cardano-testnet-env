@@ -2,11 +2,12 @@ version: "3.5"
 
 services:
   cardano-node:
-    image: inputoutput/cardano-node:1.35.2
+    image: inputoutput/cardano-node:1.35.3-configs
     container_name: cardano-node-testnet
     environment:
-      NETWORK: testnet
+      NETWORK: preprod
     volumes:
+      - ./preprod-configs:/config/preprod
       - node-testnet-db:/data
       - node-ipc:/ipc
 # The following options were blindly copypasted from cardano-wallet's docker-compose file:
@@ -33,7 +34,6 @@ services:
     build:
       context: .
       dockerfile: plutus-chain-index.Dockerfile
-    image: plutus-chain-index:latest
     restart: on-failure
     depends_on:
       - cardano-node
@@ -42,11 +42,9 @@ services:
     volumes:
       - node-ipc:/ipc
       - chain-index-testnet-db:/data
-    environment:
-      - ADDITIONAL_PARAMS=--append-transaction-queue-size 1
 
   cardano-wallet:
-    image: inputoutput/cardano-wallet:2022.7.1
+    image: inputoutput/cardano-wallet:2022.8.16
     volumes:
       - wallet-testnet-db:/wallet-db
       - node-ipc:/ipc
@@ -58,10 +56,10 @@ services:
         --node-socket /ipc/node.socket
         --database /wallet-db
         --listen-address 0.0.0.0
-        --testnet /config/testnet/genesis-byron.json
+        --testnet /config/preprod/genesis-byron.json
       "
     environment:
-      NETWORK: testnet
+      NETWORK: preprod
     restart: on-failure
     logging:
       driver: "json-file"
