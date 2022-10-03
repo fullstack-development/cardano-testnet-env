@@ -6,6 +6,7 @@ services:
     container_name: cardano-node-testnet
     environment:
       NETWORK: preprod
+      CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
     volumes:
       - ./preprod-configs:/config/preprod
       - node-testnet-db:/data
