@@ -67,4 +67,4 @@ volumes:
     driver_opts:
        o: bind
        type: none
-       device: ${VOLUME_SOURCE}
+       device: ${NODE_IPC_VOLUME_SOURCE}
