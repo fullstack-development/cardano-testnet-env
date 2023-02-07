@@ -20,17 +20,6 @@ services:
         max-file: "10"
         max-size: "50m"
 
-  socat:
-    image: alpine/socat
-    restart: always
-    ports:
-      - 1234:1234
-    command:
-      - "tcp-listen:1234,fork,reuseaddr"
-      - "unix-connect:/ipc/node.socket"
-    volumes:
-      - node-ipc:/ipc
-
   plutus-chain-index:
     build:
       context: .
@@ -74,3 +63,8 @@ volumes:
   chain-index-testnet-db:
   wallet-testnet-db:
   node-ipc:
+    driver: local
+    driver_opts:
+       o: bind
+       type: none
+       device: ${VOLUME_SOURCE}
