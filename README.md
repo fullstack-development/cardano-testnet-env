@@ -6,53 +6,12 @@ This repo contains docker infrastructure necessary to set up and run
 
 ## Running
 ```sh
+export NODE_IPC_VOLUME_SOURCE=path/to/volume/with/node/socket
 docker-compose up -d
 ```
 
 ## Using
-`cardano-wallet` and `plutus-chain-index` are available on ports `8090` and `9083` respectively. `cardano-node`, on the other hand is only available via socket, in order to access it remotely you can use `socat`. Run this command on your local machine:
-```
-socat UNIX-LISTEN:${CARDANO_NODE_SOCKET_PATH},fork,reuseaddr,unlink-early, TCP:${HOST_IP_ADDR}:1234
-```
-
-### Wrapping socat in systemd service
-For developers convenience it may make sense to wrap it into the custom service for `systemd`.
-
-Write this to `~/.config/systemd/user/some-concrete-cardano-node.service`:
-```systemd
-[Unit]
-Description=Some concrete cardano testnet node tunnel
-
-[Service]
-Type=simple
-SyslogIdentifier=some-concrete-cardano-node-tunnel
-Restart=always
-RestartSec=5
-KillSignal=SIGINT
-LimitNOFILE=32768
-ExecStart=socat UNIX-LISTEN:${CARDANO_NODE_SOCKET_PATH},fork,reuseaddr,unlink-early, TCP:${HOST_IP_ADDR}:1234
-Environment="CARDANO_NODE_SOCKET_PATH=/tmp/node.socket"
-Environment="HOST_IP_ADDR=<IP HERE>"
-
-[Install]
-WantedBy=default.target
-```
-
-Make sure you specify correct `CARDANO_NODE_SOCKET_PATH` and `HOST_IP_ADDR`.
-
-Start and enable the service:
-```sh
-systemctl --user daemon-reload
-systemctl --user enable some-concrete-cardano-node
-systemctl --user start some-concrete-cardano-node
-```
-
-Check if it's up and running:
-```sh
-systemctl --user status some-concrete-cardano-node
-```
-
-Now you don't need to start `socat` each time after reboot.
+`cardano-wallet` and `plutus-chain-index` are available on ports `8090` and `9083` respectively.  `cardano-node` is available locally by socket file located in `${NODE_IPC_VOLUME_SOURCE}` directory.
 
 ### "Connection lost with the node. Couldn't connect to node (x999). Retrying in a bit..."
 
