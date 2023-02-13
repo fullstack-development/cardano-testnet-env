@@ -8,7 +8,7 @@ services:
       NETWORK: preprod
       CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
     volumes:
-      - ./preprod-configs:/config/preprod
+      - configs:/config/preprod
       - node-testnet-db:/data
       - node-ipc:/ipc
 # The following options were blindly copypasted from cardano-wallet's docker-compose file:
@@ -74,3 +74,9 @@ volumes:
   chain-index-testnet-db:
   wallet-testnet-db:
   node-ipc:
+  configs:
+    driver: local
+    driver_opts:
+       o: bind
+       type: none
+       device: ${CONFIGS_VOLUME}
