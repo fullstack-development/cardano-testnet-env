@@ -4,6 +4,9 @@ This repo contains docker infrastructure necessary to set up and run
 [`cardano-wallet`](https://hub.docker.com/r/inputoutput/cardano-wallet) and
 [`plutus-chain-index`](https://github.com/input-output-hk/plutus-apps/tree/main/plutus-chain-index).
 
+## Before running
+Download preprod configs to `./preprod-configs` directory
+
 ## Running
 ```sh
 docker-compose up -d
