@@ -60,23 +60,8 @@ services:
 
 volumes:
   node-testnet-db:
-    driver: local
-    driver_opts:
-       o: bind
-       type: none
-       device: ${NODE_DB_VOLUME}
   chain-index-testnet-db:
-    driver: local
-    driver_opts:
-       o: bind
-       type: none
-       device: ${CHAIN_INDEX_DB_VOLUME}
   wallet-testnet-db:
-    driver: local
-    driver_opts:
-       o: bind
-       type: none
-       device: ${WALLET_DB_VOLUME}
   node-ipc:
     driver: local
     driver_opts:
