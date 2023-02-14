@@ -60,3 +60,8 @@ Now you don't need to start `socat` each time after reboot.
 ### "Connection lost with the node. Couldn't connect to node (x999). Retrying in a bit..."
 
 `cardano-wallet` may spam such warnings in its output. There is no cause for panic, this happens during normal operation due to a bug within cardano-wallet itself: [Rework the "Local Tx Submission" node client. #3487](https://github.com/input-output-hk/cardano-wallet/pull/3487).
+
+
+### NOTE
+
+If you want to deploy testnet on the same machine with PAB, you can use node socket strightly without `socat`. `production-env` branch contains the version without socat.
