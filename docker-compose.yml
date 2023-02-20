@@ -33,6 +33,17 @@ services:
       - node-ipc:/ipc
       - chain-index-testnet-db:/data
 
+  socat:
+    image: alpine/socat
+    restart: always
+    ports:
+      - 1234:1234
+    command:
+      - "tcp-listen:1234,fork,reuseaddr"
+      - "unix-connect:/ipc/node.socket"
+    volumes:
+      - node-ipc:/ipc
+
   cardano-wallet:
     image: inputoutput/cardano-wallet:2022.12.14
     volumes:
@@ -63,11 +74,6 @@ volumes:
   chain-index-testnet-db:
   wallet-testnet-db:
   node-ipc:
-    driver: local
-    driver_opts:
-       o: bind
-       type: none
-       device: ${NODE_IPC_VOLUME_SOURCE}
   configs:
     driver: local
     driver_opts:
