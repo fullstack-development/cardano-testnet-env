@@ -2,13 +2,13 @@ version: "3.5"
 
 services:
   cardano-node:
-    image: inputoutput/cardano-node:1.35.3-configs
+    image: inputoutput/cardano-node:1.35.4
     container_name: cardano-node-testnet
     environment:
       NETWORK: preprod
       CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
     volumes:
-      - ./preprod-configs:/config/preprod
+      - configs:/config/preprod
       - node-testnet-db:/data
       - node-ipc:/ipc
 # The following options were blindly copypasted from cardano-wallet's docker-compose file:
@@ -19,17 +19,6 @@ services:
         compress: "true"
         max-file: "10"
         max-size: "50m"
-
-  socat:
-    image: alpine/socat
-    restart: always
-    ports:
-      - 1234:1234
-    command:
-      - "tcp-listen:1234,fork,reuseaddr"
-      - "unix-connect:/ipc/node.socket"
-    volumes:
-      - node-ipc:/ipc
 
   plutus-chain-index:
     build:
@@ -44,8 +33,19 @@ services:
       - node-ipc:/ipc
       - chain-index-testnet-db:/data
 
+  socat:
+    image: alpine/socat
+    restart: always
+    ports:
+      - 1234:1234
+    command:
+      - "tcp-listen:1234,fork,reuseaddr"
+      - "unix-connect:/ipc/node.socket"
+    volumes:
+      - node-ipc:/ipc
+
   cardano-wallet:
-    image: inputoutput/cardano-wallet:2022.8.16
+    image: inputoutput/cardano-wallet:2022.12.14
     volumes:
       - wallet-testnet-db:/wallet-db
       - node-ipc:/ipc
@@ -74,3 +74,9 @@ volumes:
   chain-index-testnet-db:
   wallet-testnet-db:
   node-ipc:
+  configs:
+    driver: local
+    driver_opts:
+       o: bind
+       type: none
+       device: ${CONFIGS_VOLUME}
